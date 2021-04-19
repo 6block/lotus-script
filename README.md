@@ -141,7 +141,7 @@ fab firm
 ```
 
 ## 存储
-
+<font color=red size=5>！！！切记不要在把下面的脚本在已有数据的存储机上跑！！！</font>
 ```
 cd ~/share/ssd/script/fabric/fabric_storage
 
