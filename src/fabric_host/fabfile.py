@@ -219,6 +219,24 @@ def iperf_to_storage():
     for ip in storages:
         local('iperf -t 1 -c %s' % ip, capture=True)
 
+def set_hostname():
+    ip = run("hostname -I")
+    newhostname = ip.replace(".", "-")
+    oldhostname = run("hostname")
+    sudo('hostnamectl set-hostname %s' % newhostname)
+    sudo('sed -i "s/%s/%s/g" /etc/hosts' % (oldhostname, newhostname))
+
+
+@parallel
+def create_user_ps():
+    with settings(warn_only=True):
+        sudo("groupadd -g 1999 ps")
+        sudo("useradd -d /home/ps -m -s /bin/bash -g ps -G sudo -u 1999 ps")
+        sudo('echo "ps:6block" |chpasswd')
+
+
+def zap():
+    local("sudo mv /home/ps/share/hdd/data/zap-pretty /usr/local/bin/")
 
 @parallel
 def one_key():
